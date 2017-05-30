@@ -1,0 +1,1 @@
+function _toConsumableArray(r){if(Array.isArray(r)){for(var o=0,n=Array(r.length);o<r.length;o++)n[o]=r[o];return n}return Array.from(r)}var world="world",func=function(){return console.log("hello,"+world),[].concat(_toConsumableArray("666"))};func();

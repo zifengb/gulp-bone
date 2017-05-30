@@ -3,10 +3,9 @@
  * 		1.编译sass
  * 		2.给编译后的css添加prefixer前缀
  * 		3.Babel编译，把Es6代码编译成Es5
- * 		4.清除没有使用的css
- * 		5.压缩图片/html/css/js
- * 		6.browser-sync监听文件修改进行热加载更新
- * 		7.js添加jsdoc注解(保留的后期功能)
+ * 		4.压缩图片/html/css/js
+ * 		5.browser-sync监听文件修改进行热加载更新
+ * 		6.js添加jsdoc注解(保留的后期功能)
  */
 
 const gulp = require("gulp");

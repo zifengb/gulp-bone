@@ -23,6 +23,8 @@ const cleanCss = require("gulp-clean-css");
 const imagemin = require("gulp-imagemin");
 // 压缩html插件
 const htmlmin = require("gulp-htmlmin");
+// 只传递修改的文件，提高效率
+const changed = require('gulp-changed');
 // jsdoc
 // const jsdoc = require("gulp-jsodc3")
 
@@ -55,6 +57,7 @@ gulp.task('compileEs6', function(cb) {
   //             .pipe(gulp.dest(resourceSrc.js.libDir));
   pump([
     gulp.src(resourceSrc.js.allSrcJs),
+    changed(resourceSrc.js.libDir),
     babel(),
     uglify(),
     gulp.dest(resourceSrc.js.libDir)
@@ -64,6 +67,7 @@ gulp.task('compileEs6', function(cb) {
 // sass
 gulp.task('compileSass', function() {
   return gulp.src(resourceSrc.css.allSrcCss)
+              .pipe(changed(resourceSrc.css.libDir))
               .pipe(sass().on('error',sass.logError))
               .pipe(autoprefixer({
                 browsers:["last 2 version"],
@@ -78,17 +82,20 @@ gulp.task('compileSass', function() {
 // image
 gulp.task('imagemin', function() {
     gulp.src(resourceSrc.image.allSrcImg)
+        .pipe(changed(resourceSrc.image.libDir))
         .pipe(imagemin())
         .pipe(gulp.dest(resourceSrc.image.libDir))
 });
 
 // html
-gulp.task('moveHtml', function() {
-  return gulp.src(resourceSrc.html.allSrcHtml)
-    .pipe(gulp.dest(resourceSrc.html.libDir))
-});
+// gulp.task('moveHtml', ['htmlmin'], function() {
+//   return gulp.src(resourceSrc.html.allSrcHtml)
+//     .pipe(gulp.dest(resourceSrc.html.libDir))
+// });
+
 gulp.task('htmlmin', function() {
     return gulp.src(resourceSrc.html.allSrcHtml)
+                .pipe(changed(resourceSrc.html.libDir))
                 .pipe(htmlmin({
                   collapseWhitespace: true
                 }))
@@ -118,7 +125,7 @@ gulp.task('server', ['env'], function() {
 
 // 开发模式
 gulp.task('env-watch', function() {
-  gulp.watch('./src/**/*.*', ['moveHtml','compileEs6','compileSass']);
+  gulp.watch('./src/**/*.*', ['htmlmin','compileEs6','compileSass']);
 });
 
 gulp.task('env', ['env-watch']);
